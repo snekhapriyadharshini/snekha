@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Color Palette</title>
+    <style>
+        body { font-family: Arial, sans-serif; }
+        .color-box {
+            width: 100px;
+            height: 100px;
+            display: inline-block;
+            margin: 5px;
+            border: 1px solid #000;
+        }
+    </style>
+</head>
+<body>
+    <h1>Color Palette for {{ image.filename }}</h1>
+    <div>
+        {% for color in colors %}
+            <div class="color-box" style="background-color: #{{ color }};"></div>
+        {% endfor %}
+    </div>
+    <a href="/">Go Back</a>
+</body>
+</html>

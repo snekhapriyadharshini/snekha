@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Top Colors Finder</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background: linear-gradient(to right, #ff7e5f, #feb47b);
+            color: #333;
+            padding: 20px;
+        }
+
+        header, form, main {
+            margin: auto;
+            max-width: 800px;
+            background: white;
+            padding: 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            margin-bottom: 20px;
+        }
+
+        header > h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            color: #3e3e3e;
+        }
+
+        header > p {
+            color: #555;
+            font-size: 1.2rem;
+        }
+
+        form {
+            margin-top: 20px;
+            padding: 20px;
+            border-radius: 8px;
+            background-color: #e3f2fd;
+            border: 1px solid #bbdefb;
+        }
+
+        input {
+            margin: 10px 0;
+            width: 100%;
+            padding: 10px;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+        }
+
+        input[type='submit'] {
+            background-color: #2196F3;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-size: 1.2rem;
+        }
+
+        input[type='submit']:hover {
+            background-color: #1976D2;
+        }
+
+        main {
+            padding: 0;
+        }
+
+        .pair {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            padding: 10px;
+            background: #fafafa;
+            position: relative;
+        }
+
+        .color-box {
+            width: 45%;
+            height: 50px;
+            border-radius: 4px;
+            display: inline-block;
+            transition: transform 0.2s;
+        }
+
+        .color-box:hover {
+            transform: scale(1.05);
+        }
+
+        .color-box-value {
+            width: 50%;
+            text-align: center;
+            padding: 10px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .image-gallery {
+            display: flex;
+            flex-wrap: wrap;
+            margin-top: 20px;
+        }
+
+        .image-box {
+            margin: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            overflow: hidden;
+            width: 150px;
+            text-align: center;
+        }
+
+        .image-box img {
+            width: 100%;
+            height: auto;
+        }
+
+        .download-btn {
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1.2rem;
+            display: block;
+            text-align: center;
+            text-decoration: none;
+        }
+
+        .download-btn:hover {
+            background-color: #45a049;
+        }
+
+        .color-pattern {
+            margin-top: 20px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            padding: 10px;
+            background: #f9f9f9;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Welcome to Image Colour Palette Generator</h1>
+        <p>Upload an image and discover the top 10 most used colors along with their hex codes.</p>
+    </header>
+    <form action="/" method="POST" enctype="multipart/form-data">
+        <input type="file" name="file" required />
+        <br>
+        <label>Select a Colour Code:</label>
+        <label><input type="radio" name="colour_code" value="rgb" checked> RGB</label>
+        <label><input type="radio" name="colour_code" value="hex"> Hex</label>
+        <br>
+        <input type="submit" value="Generate Colors" />
+    </form>
+
+    <main>
+        {% if colors_list %}
+            <h2>Top Colors</h2>
+            <div>
+                {% for i in range(colors_list|length) %}
+                    <div class="pair">
+                        <div class="color-box" style="background-color: {% if code == 'hex' %}#{{ colors_list[i] }}{% else %}rgb{{ colors_list[i] }}{% endif %};"></div>
+                        <div class="color-box-value">{{ i + 1 }}: {% if code == 'hex' %}#{{ colors_list[i] }}{% else %}rgb{{ colors_list[i] }}{% endif %}</div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        <h2>Uploaded Images</h2>
+        <div class="image-gallery">
+            {% for image in images %}
+                <div class="image-box">
+                    <img src="{{ image.filepath }}" alt="{{ image.filename }}">
+                    <p>{{ image.filename }}</p>
+                    <div class="color-pattern">
+                        <strong>Colors:</strong> {{ image.colors }}
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </main>
+</body>
+</html>
